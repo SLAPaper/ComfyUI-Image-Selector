@@ -4,7 +4,7 @@ A custom node for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which ca
 
 ## Background
 
-ComfyUI dosn't handle batch generation seeds like A1111 WebUI do, so you can't simply increase the generation seed to get the desire image from a batch generation.
+ComfyUI dosn't handle batch generation seeds like A1111 WebUI do (See [Issue #165](https://github.com/comfyanonymous/ComfyUI/issues/165)), so you can't simply increase the generation seed to get the desire image from a batch generation.
 
 So here is a simple node that can select some of the images from a batch and pipe through for further use, such as scaling up or "hires fix".
 
