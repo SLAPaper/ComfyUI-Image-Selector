@@ -14,9 +14,9 @@ Or you can use PreviewImage Node to go through all the images, and then rewire S
 
 Input: a list of selected indexes, start with 1 (not 0, sorry), seperated by comma.
 
-For example (no surronding quotes):
+For example:
 
-1. "1": select the first image
-2. "1,3,4,6,7": select the 1st, 3rd, 4th, 6th and 7th image
+1. `1`: select the first image
+2. `1,3,4,6,7`: select the 1st, 3rd, 4th, 6th and 7th image
 
 All indexes that cannot convert to integer or out of bounds will be ignored.
