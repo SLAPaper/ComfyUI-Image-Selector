@@ -10,6 +10,10 @@ So here is a simple node that can select some of the images from a batch and pip
 
 Or you can use PreviewImage Node to go through all the images, and then rewire SaveImage with ImageSelector to save the one you want.
 
+## Install
+
+Clone this repo into `custom_nodes` directory of ComfyUI location
+
 ## Usage
 
 Input: a list of selected indexes, start with 1 (not 0, sorry), seperated by comma.
