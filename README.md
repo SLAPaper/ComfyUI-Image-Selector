@@ -1,6 +1,6 @@
 # ComfyUI-Image-Selector
 
-A custom node for (ComfyUI)[https://github.com/comfyanonymous/ComfyUI], which can select one or some of images from a batch.
+A custom node for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), which can select one or some of images from a batch.
 
 ## Background
 
