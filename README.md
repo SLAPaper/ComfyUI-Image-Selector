@@ -16,6 +16,8 @@ Clone this repo into `custom_nodes` directory of ComfyUI location
 
 ## Usage
 
+There are two nodes, one is `ImageSelector` under `image` category, another is `LatentSelecotr` under `latent` category. One is images and one for latent images.
+
 Input: a list of selected indexes, start with 1 (not 0, sorry), seperated by comma.
 
 For example:
