@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import torch
 import typing as tg
 
 
@@ -48,7 +49,8 @@ class ImageSelector:
 
     CATEGORY = "image"
 
-    def run(self, images: tg.Sequence[tg.Any], selected_indexes: tg.Text):
+    def run(self, images: tg.Sequence[tg.Mapping[tg.Text, tg.Any]],
+            selected_indexes: tg.Text):
         res_images: tg.List[tg.Any] = []
         for s in selected_indexes.strip().split(','):
             try:
@@ -62,6 +64,48 @@ class ImageSelector:
             return (res_images, )
 
         return (images, )
+
+
+class ImageDuplicator:
+    """
+    Duplicate each images and pipe through
+    """
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        """
+        Input: copies you want to get
+        """
+        return {
+            "required": {
+                "images": ("IMAGE", ),
+                "dup_times": ("INT", {
+                    "default": 2,
+                    "min": 1,
+                    "max": 16,
+                    "step": 1,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("IMAGE", )
+    #RETURN_NAMES = ("image_output_name",)
+
+    FUNCTION = "run"
+
+    OUTPUT_NODE = False
+
+    CATEGORY = "image"
+
+    def run(self, images: tg.Sequence[tg.Any], dup_times: int):
+        res_images: tg.List[tg.Any] = []
+        for _ in range(dup_times):
+            res_images.extend(images)
+
+        return (res_images, )
 
 
 class LatentSelector:
@@ -118,9 +162,59 @@ class LatentSelector:
         return (latent_image, )
 
 
+class LatentDuplicator:
+    """
+    Duplicate each latent images and pipe through
+    """
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        """
+        Input: copies you want to get
+        """
+        return {
+            "required": {
+                "latent_image": ("LATENT", ),
+                "dup_times": ("INT", {
+                    "default": 2,
+                    "min": 1,
+                    "max": 16,
+                    "step": 1,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT", )
+    #RETURN_NAMES = ("image_output_name",)
+
+    FUNCTION = "run"
+
+    OUTPUT_NODE = False
+
+    CATEGORY = "latent"
+
+    def run(self, latent_image: tg.Sequence[tg.Mapping[tg.Text, torch.Tensor]],
+            dup_times: int):
+        samples = latent_image['samples']
+        shape = samples.shape
+
+        sample_list = [samples] + [
+            torch.clone(samples) for _ in range(dup_times - 1)
+        ]
+
+        return ({
+            'samples': torch.cat(sample_list),
+        }, )
+
+
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
     "ImageSelector": ImageSelector,
-    "LatentSelector": LatentSelector
+    "ImageDuplicator": ImageDuplicator,
+    "LatentSelector": LatentSelector,
+    "LatentDuplicator": LatentDuplicator
 }
