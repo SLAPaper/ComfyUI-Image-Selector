@@ -16,7 +16,9 @@ Clone this repo into `custom_nodes` directory of ComfyUI location
 
 ## Usage
 
-There are two nodes, one is `ImageSelector` under `image` category, another is `LatentSelecotr` under `latent` category. One is images and one for latent images.
+### Selectors
+
+There are two Selector nodes, one is `ImageSelector` under `image` category, another is `LatentSelecotr` under `latent` category. One is for images and one for latent images.
 
 Input: a list of selected indexes, start with 1 (not 0, sorry), seperated by comma.
 
@@ -26,3 +28,17 @@ For example:
 2. `1,3,4,6,7`: select the 1st, 3rd, 4th, 6th and 7th image
 
 All indexes that cannot convert to integer or out of bounds will be ignored.
+
+### Duplicators
+
+There are two Duplicator nodes, `ImageDuplicator` and `LatentDuplicator`.
+
+These two can duplicate the image / latent image (after you selected), so that in further steps you still can run in batch.
+
+Example in txt2img:
+
+`EmptyLatentImage(batch 4) -> KSampler(batch 4) -> LatentSelector(select 1) -> LatentDuplicator(duplicate 4) -> LatentUpscale(batch 4) -> VaeDecode(batch 4) -> ImageSelector(select 1) -> SaveImage`
+
+Or in img2img:
+
+`LoadImage(batch 1) -> ImageDuplicator(duplicate 4) -> VaeEncode(batch 4) -> KSampler(batch 4) -> VaeDecode(batch 4) -> ImageSelector(select 1) -> SaveImage`
