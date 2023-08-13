@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import torch
 import typing as tg
+
+import torch
 
 
 class ImageSelector:
@@ -49,20 +50,24 @@ class ImageSelector:
 
     CATEGORY = "image"
 
-    def run(self, images: tg.Sequence[tg.Mapping[tg.Text, tg.Any]],
-            selected_indexes: tg.Text):
-        res_images: tg.List[tg.Any] = []
+    def run(self, images: torch.Tensor, selected_indexes: tg.Text):
+        shape = images.shape
+        len_first_dim = shape[0]
+
+        selected_index: tg.List[int] = []
         for s in selected_indexes.strip().split(','):
             try:
                 x: int = int(s.strip()) - 1
-                if x < len(images):
-                    res_images.append(images[x])
+                if x < len_first_dim:
+                    selected_index.append(x)
             except:
                 pass
 
-        if res_images:
-            return (res_images, )
+        if selected_index:
+            print(f"ImageSelector: selected: {len(selected_index)} latents")
+            return (images[selected_index, :, :, :], )
 
+        print(f"ImageSelector: selected no latents, passthrough")
         return (images, )
 
 
@@ -72,6 +77,7 @@ class ImageDuplicator:
     """
 
     def __init__(self):
+        self._name = "ImageDuplicator"
         pass
 
     @classmethod
@@ -100,12 +106,16 @@ class ImageDuplicator:
 
     CATEGORY = "image"
 
-    def run(self, images: tg.Sequence[tg.Any], dup_times: int):
-        res_images: tg.List[tg.Any] = []
-        for _ in range(dup_times):
-            res_images.extend(images)
+    def run(self, images: torch.Tensor, dup_times: int):
 
-        return (res_images, )
+        tensor_list = [images
+                       ] + [torch.clone(images) for _ in range(dup_times - 1)]
+
+        print(
+            f"ImageDuplicator: dup {dup_times} times,",
+            f"return {len(tensor_list)} images",
+        )
+        return (torch.cat(tensor_list), )
 
 
 class LatentSelector:
@@ -141,7 +151,7 @@ class LatentSelector:
 
     CATEGORY = "latent"
 
-    def run(self, latent_image: tg.Sequence[tg.Any],
+    def run(self, latent_image: tg.Mapping[tg.Text, torch.Tensor],
             selected_indexes: tg.Text):
         samples = latent_image['samples']
         shape = samples.shape
@@ -157,8 +167,10 @@ class LatentSelector:
                 pass
 
         if selected_index:
+            print(f"LatentSelector: selected: {len(selected_index)} latents")
             return ({'samples': samples[selected_index, :, :, :]}, )
 
+        print(f"LatentSelector: selected no latents, passthrough")
         return (latent_image, )
 
 
@@ -196,15 +208,18 @@ class LatentDuplicator:
 
     CATEGORY = "latent"
 
-    def run(self, latent_image: tg.Sequence[tg.Mapping[tg.Text, torch.Tensor]],
+    def run(self, latent_image: tg.Mapping[tg.Text, torch.Tensor],
             dup_times: int):
         samples = latent_image['samples']
-        shape = samples.shape
 
         sample_list = [samples] + [
             torch.clone(samples) for _ in range(dup_times - 1)
         ]
 
+        print(
+            f"LatentDuplicator: dup {dup_times} times,",
+            f"return {len(sample_list)} images",
+        )
         return ({
             'samples': torch.cat(sample_list),
         }, )
