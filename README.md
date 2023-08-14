@@ -16,11 +16,11 @@ Clone this repo into `custom_nodes` directory of ComfyUI location
 
 ## Usage
 
-### Selectors
+### ImageSelector & ImageDuplicator
 
-There are two Selector nodes, one is `ImageSelector` under `image` category, another is `LatentSelecotr` under `latent` category. One is for images and one for latent images.
+Both nodes can be found in `image` category.
 
-Input: a list of selected indexes, start with 1 (not 0, sorry), seperated by comma.
+Selector takes a list of selected indexes, start with 1 (not 0, sorry), seperated by comma, and outputs only the selected images from input images.
 
 For example:
 
@@ -29,16 +29,21 @@ For example:
 
 All indexes that cannot convert to integer or out of bounds will be ignored.
 
-### Duplicators
+Duplicator takes a number and duplicates input images by given times.
 
-There are two Duplicator nodes, `ImageDuplicator` and `LatentDuplicator`.
+![Snipaste_2023-08-14_23-42-04](https://github.com/SLAPaper/ComfyUI-Image-Selector/assets/7543632/f8d4a3ca-4ee5-4947-9bf5-ea847f392716)
 
-These two can duplicate the image / latent image (after you selected), so that in further steps you still can run in batch.
 
-Example in txt2img:
+### LatentSelector & LatentDuplicator
 
-`EmptyLatentImage(batch 4) -> KSampler(batch 4) -> LatentSelector(select 1) -> LatentDuplicator(duplicate 4) -> LatentUpscale(batch 4) -> VaeDecode(batch 4) -> ImageSelector(select 1) -> SaveImage`
+Both nodes can be found in `latent` category.
 
-Or in img2img:
+The parameters and functionality is just like the image counterpart, but for latents
 
-`LoadImage(batch 1) -> ImageDuplicator(duplicate 4) -> VaeEncode(batch 4) -> KSampler(batch 4) -> VaeDecode(batch 4) -> ImageSelector(select 1) -> SaveImage`
+![Snipaste_2023-08-14_23-44-02](https://github.com/SLAPaper/ComfyUI-Image-Selector/assets/7543632/220759af-3b06-42fa-9332-43bff3744857)
+
+## Tips
+
+VAE Decode & Encode takes time and vram, so better avoid uneccessary VAE node. If must, do it with as few images/latents as possible. In general,
+- `encode/decode -> duplicator` is better than `duplicator -> encode/decode`
+- `selector -> encode/decode` is better than `encode/decode -> selector`
