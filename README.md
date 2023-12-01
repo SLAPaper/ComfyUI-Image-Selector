@@ -22,10 +22,15 @@ Both nodes can be found in `image` category.
 
 Selector takes a list of selected indexes, start with 1 (not 0, sorry), seperated by comma, and outputs only the selected images from input images.
 
+**New in 2023/12/2:** Support range selection with left bound included and right bound excluded, see example below.
+
 For example:
 
 1. `1`: select the first image
 2. `1,3,4,6,7`: select the 1st, 3rd, 4th, 6th and 7th image
+3. `2:`: select 2nd, 3rd, ..., till the last image (omit the first image)
+4. `:0`: select 1st, 2nd, ..., till the second last image (omit the last image)
+5. `3:-1`: select 3rd, 4th, ..., till the third last image (omit first two and last two images)
 
 All indexes that cannot convert to integer or out of bounds will be ignored.
 
