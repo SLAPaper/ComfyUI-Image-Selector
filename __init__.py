@@ -95,7 +95,7 @@ class ImageSelector:
 
         if selected_index:
             print(f"ImageSelector: selected: {len(selected_index)} images")
-            return (images[selected_index, :, :, :], )
+            return (images[selected_index], )
 
         print(f"ImageSelector: selected no images, passthrough")
         return (images, )
