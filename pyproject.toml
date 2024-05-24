@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-image-selector"
+description = "A custom node for ComfyUI, which can select one or some of images from a batch."
+version = "1.0.0"
+license = "LICENSE"
+
+[project.urls]
+Repository = "https://github.com/SLAPaper/ComfyUI-Image-Selector"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = "slapaper"
+DisplayName = "ComfyUI-Image-Selector"
+Icon = ""
