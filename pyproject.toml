@@ -9,6 +9,6 @@ Repository = "https://github.com/SLAPaper/ComfyUI-Image-Selector"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "slapaper"
 DisplayName = "ComfyUI-Image-Selector"
 Icon = ""
